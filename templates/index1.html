@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Window Transition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Allerta+Stencil&family=Alice&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+
+<body>
+    <!-- First Window -->
+    <div class="first-window">
+        <div class="overlay">
+            <h1 class="main-title">Welcome To</h1>
+            <h1 class="subtitle">VIZ AI</h1>
+
+        </div>
+    </div>
+
+    <!-- Second Window -->
+    <div class="second-window">
+        <nav class="navbar">
+            <ul>
+                <li><a href="#" class="active" data-section="home-content">Home</a></li>
+                <li><a href="#" data-section="about-us-content">About Us</a></li>
+                <li><a href="#" data-section="help-content">Help</a></li>
+                <li style="margin-left: auto;"><span style="display: block;">VIZ AI</span></li>
+            </ul>
+        </nav>
+        <div class="content">
+            <div class="home-content">
+                <h1>Welcome</h1>
+                <p class="intro-text">
+                    In today's data-driven world, the ability to interpret and visualize data effectively is crucial for
+                    decision-making across various domains. From healthcare and finance to social sciences and
+                    technology, the demand for intuitive and insightful data visualizations is ever-increasing. However,
+                    creating these visualizations often requires specialized skills and knowledge in data analysis and
+                    visualization techniques, which can be a barrier for many users. Leveraging advancements in natural
+                    language processing (NLP) and machine learning, the proposed system will allow users to simply
+                    describe the data they want to visualize and receive corresponding graphical representations.
+                </p>
+                <div class="file-upload-container">
+                    <label for="fileInput" class="upload-btn"><i class="fas fa-upload"></i> Upload File</label>
+                    <input type="file" id="fileInput" hidden>
+                </div>
+            </div>
+            <div class="about-us-content" style="display: none;">
+                <h1>About Us</h1>
+                <p>We are a team of passionate Computer Science Engineering students from Bangalore Institute of
+                    Technology, driven to bridge the gap between data analysis and visualization. Our mission is to
+                    empower users to effortlessly explore and understand complex data insights through intuitive
+                    visualizations.</p>
+
+                <div class="team-members">
+                    <div class="team-member">
+                        <img src="{{ url_for('static', filename='images/aishwarya.jpg') }}" alt="Team Member 1">
+                        <h3>AISHWARYA K R</h3>
+
+                    </div>
+                    <div class="team-member">
+                        <img src="{{ url_for('static', filename='images/apoorva.jpg') }}" alt="Team Member 2">
+                        <h3>APOORVA SREENIVAS</h3>
+
+                    </div>
+                    <div class="team-member">
+                        <img src="{{ url_for('static', filename='images/bhavana.jpg') }}" alt="Team Member 3">
+                        <h3>BHAVANA J N</h3>
+
+                    </div>
+                    <div class="team-member">
+                        <img src="{{ url_for('static', filename='images/tejaswini.jpg') }}" alt="Team Member 4">
+                        <h3>TEJASWINI N</h3>
+
+                    </div>
+                </div>
+                <div class="guidance">
+                    <h2>Under the Guidance of</h2>
+                    <div class="guide">
+                        <img src="{{ url_for('static', filename='images/guide.jpg') }}" alt="Guide Photo">
+                        <h3>Dr. MADHURI J</h3>
+                        <p>Assistant Professor
+                        <p></p>Dept. of CSE,BIT</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="help-content" style="display: none;">
+                <h1>Help</h1>
+                <section id="getting-started">
+                    <h2>Getting Started</h2>
+                    <p>Welcome to our data visualization system! This system allows you to generate visualizations from
+                        natural language queries and CSV datasets.</p>
+                </section>
+                <section id="supported-file-format">
+                    <h2>Supported File Format</h2>
+                    <p>Our system currently supports CSV (Comma Separated Values) files.</p>
+                </section>
+                <section id="querying-the-system">
+                    <h2>Querying the System</h2>
+                    <p>To query the system, first upload a CSV dataset. For example:</p>
+                    <ul>
+                        <li>"Visualize sales by region"</li>
+                        <li>"Show customer demographics"</li>
+                        <li>"Plot temperature vs. humidity"</li>
+                    </ul>
+                </section>
+                <section id="visualization-options">
+                    <h2>Visualization Options</h2>
+                    <p>Our system offers various visualization options, including:</p>
+                    <ul>
+                        <li>Bar charts</li>
+                        <li>Line charts</li>
+                        <li>Pie charts</li>
+                        <li>Scatter plots</li>
+                        <li>Histograms</li>
+                        <li>bubble charts</li>
+                        <li>box plots</li>
+                    </ul>
+                </section>
+                <section id="uploading-csv-files">
+                    <h2>Uploading CSV Files</h2>
+                    <ol>
+                        <li>Click the "Upload File" button.</li>
+                        <li>Select your CSV file.</li>
+                        <li>Wait for the file to upload.</li>
+                    </ol>
+                </section>
+                <section id="troubleshooting">
+                    <h2>Troubleshooting</h2>
+                    <p>Common issues:</p>
+                    <ul>
+                        <li>Check file format (only CSV supported).</li>
+                        <li>Ensure data is correctly formatted.</li>
+                        <li>If an accurate visualization is not generated, then explicitly specify the chart name
+                            and fields from the list displayed beside the chat window </li>
+                        <li>Contact support for further assistance.</li>
+                    </ul>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Third Window (Query Window with Vertical Scroll) -->
+    <div class="query-window" style="display: none;">
+        <nav class="navbar">
+            <ul>
+                <li><a href="#" class="active" data-section="home">Home</a></li>
+                <li><a href="#" data-section="about-us-content">About Us</a></li>
+                <li><a href="#" data-section="help-content">Help</a></li>
+                <li style="margin-left: auto;"><span style="display: block;">VIZ AI</span></li>
+            </ul>
+        </nav>
+        <div class="chat-container">
+            <div class="responses" id="responses"></div>
+            <form id="queryForm" class="user-queries">
+                <input type="text" id="queryInput" name="query" placeholder="Type your query here..." required>
+                <button type="submit" id="sendQuery"><i class="fas fa-paper-plane"></i></button>
+                <i class="fas fa-question-circle help-icon" onclick="showHelp()"></i>
+            </form>
+            {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+            {% endif %}
+
+            {% if chart_url %}
+            <h1>Chart Type</h1>
+            <p alt="No chart">{{chart_type}}</p> <br>
+            <h1>Columns </h1>
+            <p alt="No cols">{{chart_cols}}</p><br>
+            <h2>Generated Chart:</h2>
+            <img src="{{ chart_url }}" alt="Generated Chart" style="width: 436px; height: 837px; object-fit: cover !important; display: block;">
+
+            {% endif %}
+        </div>
+
+
+        <!-- Help popup -->
+        <div class="help-popup" id="help-popup">
+            <div class="help-popup-header"> <span class="close-help-popup">&times;</span></div>
+            <h1>Help</h1>
+            <section id="getting-started">
+                <h2>Getting Started</h2>
+                <p>Welcome to our data visualization system! This system allows you to generate visualizations from
+                    natural language queries and CSV datasets.</p>
+            </section>
+            <section id="supported-file-format">
+                <h2>Supported File Format</h2>
+                <p>Our system currently supports CSV (Comma Separated Values) files.</p>
+            </section>
+            <section id="querying-the-system">
+                <h2>Querying the System</h2>
+                <p>To query the system, first upload a CSV dataset. For example:</p>
+                <ul>
+                    <li>"Visualize sales by region"</li>
+                    <li>"Show customer demographics"</li>
+                    <li>"Plot temperature vs. humidity"</li>
+                </ul>
+            </section>
+            <section id="visualization-options">
+                <h2>Visualization Options</h2>
+                <p>Our system offers various visualization options, including:</p>
+                <ul>
+                    <li>Bar charts</li>
+                    <li>Line charts</li>
+                    <li>Pie charts</li>
+                    <li>Scatter plots</li>
+                    <li>Histograms</li>
+                    <li>bubble charts</li>
+                    <li>box plots</li>
+                </ul>
+            </section>
+            <section id="uploading-csv-files">
+                <h2>Uploading CSV Files</h2>
+                <ol>
+                    <li>Click the "Upload File" button.</li>
+                    <li>Select your CSV file.</li>
+                    <li>Wait for the file to upload.</li>
+                </ol>
+            </section>
+            <section id="troubleshooting">
+                <h2>Troubleshooting</h2>
+                <p>Common issues:</p>
+                <ul>
+                    <li>Check file format (only CSV supported).</li>
+                    <li>Ensure data is correctly formatted.</li>
+                    <li>Contact support for further assistance.</li>
+                </ul>
+            </section>
+        </div>
+        <div class="column-names">
+            <h2 style="text-align: center;">Fields:</h2>
+            <ul id="column-list"></ul>
+        </div>
+    </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
