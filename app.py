@@ -1,20 +1,32 @@
-from flask import Flask, render_template, request, Response,jsonify
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
+import io
 import matplotlib
 matplotlib.use('Agg')  # Non-GUI backend for matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
-import io
 import base64
-from fuzzywuzzy import fuzz
+from data_clean import clean_dataset
 from chat import find_chart, find_columns
 
 app = Flask(__name__)
 
+# Global DataFrame to store the latest uploaded file
+df = None
 
-file_path = '/Users/sreeni/Documents/Apoorva/VIZ-AI/sample_sales_data.csv' 
 
-df = pd.read_csv(file_path)
+# Determine column types
+def infer_column_types(df):
+    column_types = {}
+    for column in df.columns:
+        sample_data = df[column].dropna().iloc[:5]  # Use a small sample for inference
+        if pd.api.types.is_numeric_dtype(sample_data):
+            column_types[column] = "Number"
+        elif pd.api.types.is_datetime64_any_dtype(sample_data):
+            column_types[column] = "Date"
+        else:
+            column_types[column] = "String"
+    return column_types
 
 def generate_bar_chart(df, cols):
     """Generate a bar chart from the specified DataFrame columns."""
@@ -269,23 +281,27 @@ def save_chart_to_base64():
 
 @app.route("/", methods=["POST"])
 def home():
+    global df  # Ensure we're working with the global DataFrame
     chart_url = None
     error_message = None
+    column_data = {}
     chart = None
     cols = None
 
     if request.method == "POST":
-        # Check if the request is JSON (from AJAX)
+        # If the request contains a JSON payload for chart generation
         if request.is_json:
+            if df is None:
+                return jsonify({"error_message": "No file has been uploaded yet."})
+            
             data = request.get_json()  # Parse JSON data
             user_prompt = data.get("user_query", "")
-            
+
             # Process the query
-            chart = find_chart(user_prompt, df)  # Assume df is your DataFrame
-            cols = find_columns(user_prompt, df, chart)
+            chart = find_chart(user_prompt, df)  # Determine chart type
+            cols = find_columns(user_prompt, df, chart)  # Get column names
 
             try:
-                # Generate the chart based on type
                 if chart == "bar":
                     generate_bar_chart(df, cols)
                     chart_url = save_chart_to_base64()
@@ -312,14 +328,41 @@ def home():
             except ValueError as e:
                 error_message = str(e)
 
-            # Return JSON response
             return jsonify({
                 "chart_url": chart_url,
                 "error_message": error_message,
                 "chart_type": chart,
                 "chart_cols": cols
             })
-        
+
+        # Handle file upload via form-data
+        elif 'uploaded_file' in request.files:
+            file = request.files['uploaded_file']
+
+            # Ensure a file is selected
+            if file.filename == '':
+                return jsonify({"error_message": "No file selected for upload."})
+
+            # Check if the file is CSV
+            if not file.filename.endswith('.csv'):
+                return jsonify({"error_message": "Unsupported file type. Please upload a CSV file."})
+
+            try:
+                # Load CSV file into DataFrame
+                file_stream = io.StringIO(file.stream.read().decode('utf-8'))
+                df = pd.read_csv(file_stream)
+                df = clean_dataset(df)  # Optional cleaning step
+                column_data = infer_column_types(df)
+            except Exception as e:
+                error_message = str(e)
+
+            return jsonify({
+                "error_message": error_message,
+                "columns": column_data
+            })
+        else:
+            return jsonify({"error_message": "Invalid request type."})
+
 @app.route("/", methods=["GET"])
 def render_home():
     """
@@ -328,4 +371,5 @@ def render_home():
     return render_template("index1.html")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()

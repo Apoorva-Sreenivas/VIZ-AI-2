@@ -45,9 +45,15 @@
                     describe the data they want to visualize and receive corresponding graphical representations.
                 </p>
                 <div class="file-upload-container">
-                    <label for="fileInput" class="upload-btn"><i class="fas fa-upload"></i> Upload File</label>
-                    <input type="file" id="fileInput" hidden>
+                    <form id="file-upload-form" action="/" method="POST" enctype="multipart/form-data">
+                        <label for="fileInput" class="upload-btn">
+                             Choose File
+                        </label>
+                        <input type="file" id="fileInput" name="uploaded_file" hidden>
+                        <button type="submit" class="submit-btn"><i class="fas fa-upload"></i></button>
+                    </form>
                 </div>
+                
             </div>
             <div class="about-us-content" style="display: none;">
                 <h1>About Us</h1>

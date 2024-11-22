@@ -30,26 +30,26 @@ document.querySelectorAll('.second-window .navbar li a').forEach((link) => {
     });
 });
 
-// File Upload Transition to Third Window
+/// Handle file input change
 document.querySelector('#fileInput').addEventListener('change', (e) => {
-  const uploadedFile = e.target.files[0];
-  const fileType = uploadedFile.type;
-  const allowedFileType = 'text/csv';
+  const uploadedFile = e.target.files[0]; // Get the selected file
+  const fileType = uploadedFile.type; // Get the file type
+  const allowedFileType = 'text/csv'; // Specify allowed file type
 
   if (fileType === allowedFileType) {
-    document.querySelector('.second-window').style.display = 'none';
-    document.querySelector('.query-window').style.display = 'block';
+    // Clear previous responses and column list
     document.getElementById('responses').innerHTML = '';
     const columnList = document.getElementById('column-list');
     columnList.innerHTML = '';
 
-    const reader = new FileReader();
+    const reader = new FileReader(); // Create a new FileReader instance
     reader.onload = (event) => {
-      const csvData = event.target.result;
-      const csvRows = csvData.split('\n');
-      const columnNames = csvRows[0].split(',');
+      const csvData = event.target.result; // Get the file's content
+      const csvRows = csvData.split('\n'); // Split into rows
+      const columnNames = csvRows[0].split(','); // Extract column names
       const columnTypes = [];
 
+      // Determine column types using the first row of data
       csvRows[1].split(',').forEach((value, index) => {
         if (!isNaN(parseFloat(value))) {
           columnTypes.push('Number');
@@ -60,21 +60,58 @@ document.querySelector('#fileInput').addEventListener('change', (e) => {
         }
       });
 
+      // Append column names and types to the column list
       columnNames.forEach((columnName, index) => {
         const listItem = document.createElement('LI');
-        listItem.textContent = `${columnName} (${columnTypes[index]})`;
+        listItem.textContent = `${columnName} (${columnTypes[index]})`; // Fix syntax for template literal
         columnList.appendChild(listItem);
       });
     };
-    reader.readAsText(uploadedFile);
+
+    reader.readAsText(uploadedFile); // Read the file as text
+
+    // Enable the submit button after file selection
+    const submitButton = document.querySelector('#submitBtn');
+    submitButton.disabled = false;
+    submitButton.classList.add('enabled');
   } else {
+    // Show alert for unsupported file type
     alert('Unsupported file type. Only .csv files are accepted.');
+    document.querySelector('#submitBtn').disabled = true; // Disable the submit button
   }
 
-  // Reset file input value
+  // Reset file input value to allow selecting the same file again
   e.target.value = '';
 });
 
+// Handle form submission
+document.querySelector('#file-upload-form').addEventListener('submit', (e) => {
+  e.preventDefault(); // Prevent the default form submission behavior
+
+  // Perform the form submission logic
+  const formData = new FormData(e.target);
+
+  fetch('/', {
+    method: 'POST',
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.error_message) {
+        alert(`Error: ${data.error_message}`);
+      } else {
+        // Transition to the query window on successful file upload
+        document.querySelector('.second-window').style.display = 'none';
+        document.querySelector('.query-window').style.display = 'block';
+
+        // Optionally show a success message or other info
+        console.log('File uploaded successfully:', data);
+      }
+    })
+    .catch((error) => {
+      console.error('Error during form submission:', error);
+    });
+});
 
 
 // Third Window Navigation for Home, About Us, and Help

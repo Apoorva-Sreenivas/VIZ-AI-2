@@ -92,6 +92,15 @@ body {
     border-radius: 5px;
     cursor: pointer;
   }
+  .submit-btn
+  {
+    padding: 10px 20px;
+    background-color: #48cae4; /* Light Cyan */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; 
+  }
   
   .upload-btn:hover {
     background-color: #00b4d8; /* Light Sky Blue */
@@ -264,10 +273,7 @@ body {
   background-color: #0056b3; /* Darker blue on hover */
 }
 
-
-
 /* about-us content */
-
   
 .team-members {
     display: flex;
@@ -449,6 +455,25 @@ body {
   max-width: 100%;
   max-height: 100%;
 }
+
+
+.submit-btn {
+  background-color: #48cae4;;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+
+.submit-btn:hover {
+  background-color: green;
+}
+
 
 
 
