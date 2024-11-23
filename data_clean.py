@@ -12,8 +12,8 @@ def clean_dataset(df):
     Returns:
         pd.DataFrame: The cleaned DataFrame.
     """
-    # Replace placeholders ('NA', '_', None) with np.nan
-    df = df.replace(['NA', '_', None], np.nan)
+    # Replace placeholders ('NA', '-', None) with np.nan
+    df = df.replace(['NA', '-', None], np.nan)
     
     # Find the total number of missing values
     total_missing = df.isnull().sum().sum()
